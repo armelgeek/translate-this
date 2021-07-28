@@ -12,8 +12,8 @@ router.get('/', (req, res) => {
   res.end();
 });
 router.get('/another', (req, res) => res.json({ route: req.originalUrl }));
-router.get('/trans', async (req, res) =>{
-   await translate(req.query.text,{
+router.get('/trans',  (req, res) =>{
+   translate(req.query.text,{
       to : 'fra'
    }).then(response =>{
     res.send({traduction : response.trans_result.dst,original : req.query.text})
