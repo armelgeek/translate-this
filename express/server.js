@@ -4,14 +4,26 @@ const path = require('path');
 const serverless = require('serverless-http');
 const app = express();
 const bodyParser = require('body-parser');
-
+const translate = require("baidu-translate-api");
 const router = express.Router();
 router.get('/', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.write('<h1>Hello from Express.js!</h1>');
+  res.write('<h1>Please translate this !</h1>');
   res.end();
 });
 router.get('/another', (req, res) => res.json({ route: req.originalUrl }));
+router.get('/trans', async (req, res) =>{
+   await translate(req.query.text,{
+      to : 'fra'
+   }).then(response =>{
+    res.send({traduction : response.trans_result.dst,original : req.query.text})
+   },(err)=>{
+     res.send({traduction : req.query.text})
+   }).catch(err=>{
+     res.send({traduction : req.query.text})
+   });
+
+})
 router.post('/', (req, res) => res.json({ postBody: req.body }));
 
 app.use(bodyParser.json());
